@@ -22,12 +22,6 @@
 	- Will blend two images together. 
 - Feature N 
 	- Short explaination of how it will be executed.
-- Feature N 
-	- Short explaination of how it will be executed.
-- Feature N 
-	- Short explaination of how it will be executed.
-- Feature N 
-	- Short explaination of how it will be executed.
 
 ## Challenges
 - Learned that tkinter and pygame cannot work together. Need to learn how to make a button work using pygame.
