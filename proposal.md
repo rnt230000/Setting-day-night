@@ -47,19 +47,19 @@ Minimal Viable Outcome:
 
 - Week 1 (April 14-20th)
   1. Goal 1 (Background)
-  	- Create a window.
-  	- Add png images of the ground and clouds onto the surface.
-  	- Create 2 surfaces
-  		- One for the water.
-  		- One for the background. 
+	  	- Create a window.
+	  	- Add png images of the ground and clouds onto the surface.
+	  	- Create 2 surfaces
+	  		- One for the water.
+	  		- One for the background. 
   2. Goal 2 (Buttons)
-	- Create 2 buttons
- 		- One with a text that says "Day"
-   		- One with a text that says "Night"
+		- Create 2 buttons
+	 		- One with a text that says "Day"
+	   		- One with a text that says "Night"
 
 - Week 2 (April 21-27th)
   1. Goal 1 (Buttons)
-     - Make use of pygame.mouse to make the buttons avaiable to press.
+	     - Make use of pygame.mouse to make the buttons avaiable to press.
   2. Goal 2
 
 - Week 3 (April 28th - May 4th)
