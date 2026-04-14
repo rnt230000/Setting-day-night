@@ -1,5 +1,5 @@
 # Title
-
+- Day and Night
 
 ## Repository
 <Link to your project's public GitHub respository>
@@ -59,8 +59,11 @@ Minimal Viable Outcome:
 
 - Week 2 (April 21-27th)
   1. Goal 1 (Buttons)
-	     - Make use of pygame.mouse to make the buttons avaiable to press.
-  2. Goal 2
+	    - Making the buttons able to be pressed.
+  			- Making use of pygame.mouse.
+     		- Test to see if they work.
+  3. Goal 2 (Background color change)
+     	- Make the background 
 
 - Week 3 (April 28th - May 4th)
   1. Goal 1
