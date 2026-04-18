@@ -1,3 +1,5 @@
+import pygame
+
 class SomeClass():
 
     def method_1():
@@ -10,7 +12,23 @@ class SomeClass():
         ...
 
 def main():
-    ...
+    pygame.init()
+    pygame.display.set_caption("Time Setting")
+
+    clock = pygame.time.Clock()
+    dt = 0
+    moniter_size = pygame.display.Info()
+    screen = pygame.display.set_mode((moniter_size.current_w, moniter_size.current_h), pygame.NOFRAME)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        screen.fill("black")
+        pygame.display.flip()
+        dt = clock.tick(12)
+    pygame.quit()
 
 
 def function_1():
