@@ -1,15 +1,22 @@
 import pygame
 
-class SomeClass():
+class Button():
 
-    def method_1():
-        ...
+    def __init__(self, text, x_pos, y_pos, enabled):
+        self.text = text
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.enabled = enabled
 
-    def method_2():
-        ...
+    def draw(self, surface):
+        font = pygame.font.Font('freesansbold.ttf', 18)
+        button_text = font.render(self.text, True, 'black')
+        button_rect = pygame.Rect((self.x_pos , self.y_pos), (150, 25))
+        pygame.draw.rect(surface, 'gray', button_rect, 0, 5)
+        pygame.draw.rect(surface, 'black', button_rect, 2, 5)
+        surface.blit(button_text, (self.x_pos + 3, self.y_pos + 3))
 
-    def method_n():
-        ...
+
 
 def main():
     pygame.init()
@@ -26,6 +33,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         screen.fill("black")
+        day_button = Button('Day', screen.width // 4, screen.height / 1.5, True)
+        night_button = Button('Night', screen.width // 1.5, screen.height / 1.5, True)
+        day_button.draw(screen)
+        night_button.draw(screen)
         pygame.display.flip()
         dt = clock.tick(12)
     pygame.quit()
