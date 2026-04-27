@@ -24,7 +24,10 @@ class Button():
         font = pygame.font.Font('freesansbold.ttf', 40)
         button_text = font.render(self.text, True, 'black')
         button_rect = pygame.Rect((self.x_pos , self.y_pos), (150*2, 25*2))
-        pygame.draw.rect(surface, 'gray', button_rect, 0, 5)
+        if self.check_click():
+            pygame.draw.rect(surface, 'dark gray', button_rect, 0, 5)
+        else: 
+            pygame.draw.rect(surface, 'light gray', button_rect, 0, 5)
         pygame.draw.rect(surface, 'black', button_rect, 2, 5)
         surface.blit(button_text, (self.x_pos + 3, self.y_pos + 3))
 
