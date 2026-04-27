@@ -24,10 +24,13 @@ class Button():
         font = pygame.font.Font('freesansbold.ttf', 40)
         button_text = font.render(self.text, True, 'black')
         button_rect = pygame.Rect((self.x_pos , self.y_pos), (150*2, 25*2))
-        if self.check_click():
-            pygame.draw.rect(surface, 'dark gray', button_rect, 0, 5)
-        else: 
-            pygame.draw.rect(surface, 'light gray', button_rect, 0, 5)
+        if self.enabled:
+            if self.check_click():
+                pygame.draw.rect(surface, 'dark gray', button_rect, 0, 5)
+            else: 
+                pygame.draw.rect(surface, 'light gray', button_rect, 0, 5)
+        else:
+            pygame.draw.rect(surface, 'black', button_rect, 0, 5)
         pygame.draw.rect(surface, 'black', button_rect, 2, 5)
         surface.blit(button_text, (self.x_pos + 3, self.y_pos + 3))
 
@@ -46,6 +49,10 @@ def main():
     pygame.init()
     pygame.display.set_caption("Time Setting")
 
+    is_day_enabled = False
+    is_night_enabled = True
+    is_button_enabled = True
+
     clock = pygame.time.Clock()
     dt = 0
     moniter_size = pygame.display.Info()
@@ -59,8 +66,8 @@ def main():
 
         screen.fill("black")
         # Buttons
-        day_button = Button('Day', screen.width // 5, screen.height / 1.3, True)
-        night_button = Button('Night', screen.width // 1.6, screen.height / 1.3, True)
+        day_button = Button('Day', screen.width // 5, screen.height / 1.3, is_day_enabled)
+        night_button = Button('Night', screen.width // 1.6, screen.height / 1.3, is_night_enabled)
         print(day_button.check_click())
         print(night_button.check_click())
 
