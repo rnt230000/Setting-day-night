@@ -71,6 +71,24 @@ def main():
         print(day_button.check_click())
         print(night_button.check_click())
 
+        if pygame.mouse.get_pressed()[0] and is_button_enabled: 
+            is_button_enabled = False
+            if night_button.check_click():
+                if is_day_enabled == False:
+                    is_day_enabled = True
+                    is_night_enabled = False
+                else:
+                    is_day_enabled = False
+            if day_button.check_click():
+                if is_night_enabled == False:
+                    is_night_enabled = True
+                    is_day_enabled = False
+                else:
+                    is_night_enabled = False
+        if not pygame.mouse.get_pressed()[0] and not is_button_enabled: 
+            is_button_enabled = True
+
+
         day_bg = Day(screen.width, screen.height)
 
         # Draw
