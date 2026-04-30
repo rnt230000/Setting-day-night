@@ -3,10 +3,24 @@ import pygame
 
 class Day():
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, enable):
         self.width = width
         self.height = height
+        self.enable = enable
         self.color = (92, 206, 250, 0.8)
+        self.update_color()
+
+    def update_color(self):
+        col_spd = 0.1
+        r, g, b, a = self.color
+        if self.enable == True:
+            for i in range(0,1):
+                a += col_spd
+                if a >= 1:
+                    a = 1
+                elif a <= 0:
+                    a = 0
+        print(a)
 
     def draw(self, surface):
         rect = pygame.Rect((0,0), (self.width, self.height))
@@ -68,8 +82,8 @@ def main():
         # Buttons
         day_button = Button('Day', screen.width // 5, screen.height / 1.3, is_day_enabled)
         night_button = Button('Night', screen.width // 1.6, screen.height / 1.3, is_night_enabled)
-        print(day_button.check_click())
-        print(night_button.check_click())
+        #print(day_button.check_click())
+        #print(night_button.check_click())
 
         if pygame.mouse.get_pressed()[0] and is_button_enabled: 
             is_button_enabled = False
@@ -89,7 +103,7 @@ def main():
             is_button_enabled = True
 
 
-        day_bg = Day(screen.width, screen.height)
+        day_bg = Day(screen.width, screen.height, is_day_enabled)
 
         # Draw
         day_bg.draw(screen)
