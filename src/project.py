@@ -1,6 +1,23 @@
 import pygame
 
 
+class SunMoonSurface():
+    def __init__(self, pos, size):
+        self.pos = pos
+        self.size = size
+        self.color = (0, 255, 0)
+        self.alpha = 255
+        self.surface = self.update_surface()
+    
+    def update_surface(self):
+        surf = pygame.Surface((int(self.size), int(self.size)))
+        surf.fill(self.color)
+        #surf.set_colorkey(self.color)
+        return surf
+    
+    def draw(self, surface):
+        surface.blit(self.surface, self.pos)
+
 class Day():
 
     def __init__(self, width, height, enable):
@@ -79,6 +96,12 @@ def main():
                 running = False
 
         screen.fill("black")
+        
+        sun_bg = SunMoonSurface((screen.width//8, screen.height//7), 70)
+        moon_bg = SunMoonSurface((screen.width//1.2, screen.height//1.3), 70)
+        #print((int(screen.width//8), int(screen.height//1.3)))
+        #print((int(screen.width//1.2), int(screen.height//7)))
+
         # Buttons
         day_button = Button('Day', screen.width // 5, screen.height / 1.3, is_day_enabled)
         night_button = Button('Night', screen.width // 1.6, screen.height / 1.3, is_night_enabled)
@@ -110,6 +133,8 @@ def main():
         day_bg.draw(screen)
         day_button.draw(screen)
         night_button.draw(screen)
+        sun_bg.draw(screen)
+        moon_bg.draw(screen)
 
         pygame.display.flip()
         dt = clock.tick(12)
