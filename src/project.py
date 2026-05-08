@@ -7,24 +7,24 @@ class Day():
         self.width = width
         self.height = height
         self.enable = enable
-        self.color = (92, 206, 250, 0.8)
-        self.update_color()
+        self.color = (92, 206, 250)
+        self.alpha = 0 if enable else 255
 
-    def update_color(self):
-        col_spd = 0.1
-        r, g, b, a = self.color
-        if self.enable == True:
-            for i in range(0,1):
-                a += col_spd
-                if a >= 1:
-                    a = 1
-                elif a <= 0:
-                    a = 0
-        print(a)
+
+    def update_color(self, enable, dt_ms):
+        self.enable = enable
+        target_alpha = 0 if self.enable else 255
+        fade_speed = 0.99
+
+        if self.alpha < target_alpha:
+            self.alpha = min(target_alpha, self.alpha + fade_speed * dt_ms)
+        elif self.alpha > target_alpha:
+            self.alpha = max(target_alpha, self.alpha - fade_speed * dt_ms)
 
     def draw(self, surface):
-        rect = pygame.Rect((0,0), (self.width, self.height))
-        pygame.draw.rect(surface, self.color, rect)
+        overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        overlay.fill((*self.color, int(self.alpha)))
+        surface.blit(overlay, (0,0))
 
 class Button():
 
@@ -104,6 +104,7 @@ def main():
 
 
         day_bg = Day(screen.width, screen.height, is_day_enabled)
+        day_bg.update_color(is_button_enabled, dt)
 
         # Draw
         day_bg.draw(screen)
