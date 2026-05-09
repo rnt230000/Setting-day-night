@@ -132,19 +132,28 @@ def main():
         day_bg.update_color(is_button_enabled, dt)
 
         # Draw
-        day_bg.draw(screen)
-        day_button.draw(screen)
-        night_button.draw(screen)
-        sun_surf.draw(screen)
-        moon_surf.draw(screen)
+        #day_bg.draw(screen)
+        #day_button.draw(screen)
+        #night_button.draw(screen)
+        #sun_surf.draw(screen)
+        #moon_surf.draw(screen)
+
+        draw_this(day_bg, screen)
+        draw_this(day_button, screen)
+        draw_this(night_button, screen)
+        draw_this(sun_surf, screen)
+        draw_this(moon_surf, screen)
+
+        
 
         pygame.display.flip()
         dt = clock.tick(12)
     pygame.quit()
 
 
-def function_1():
-    ...
+def draw_this(vari, screen):
+    """The vari needs to have a "draw" method in their class to work."""
+    vari.draw(screen)
 
 
 def function_2():
