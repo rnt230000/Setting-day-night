@@ -2,17 +2,20 @@ import pygame
 
 
 class SunMoonSurface():
-    def __init__(self, pos, size):
+    def __init__(self, pos, size, img):
         self.pos = pos
         self.size = size
+        self.img = img
         self.color = (0, 255, 0)
         self.alpha = 255
         self.surface = self.update_surface()
-    
+
     def update_surface(self):
         surf = pygame.Surface((int(self.size), int(self.size)))
         surf.fill(self.color)
-        #surf.set_colorkey(self.color)
+        surf.set_colorkey(self.color)
+        resized_img = pygame.transform.scale(self.img, (surf.width, surf.height))
+        surf.blit(resized_img, (surf.width//40, surf.height//40))
         return surf
     
     def draw(self, surface):
@@ -97,16 +100,15 @@ def main():
 
         screen.fill("black")
         
-        sun_bg = SunMoonSurface((screen.width//8, screen.height//7), 70)
-        moon_bg = SunMoonSurface((screen.width//1.2, screen.height//1.3), 70)
-        #print((int(screen.width//8), int(screen.height//1.3)))
-        #print((int(screen.width//1.2), int(screen.height//7)))
+        sun = pygame.image.load("pixel_sun.png")
+        moon = pygame.image.load("pixel_moon.png")
+        sun_surf = SunMoonSurface((screen.width//8, screen.height//7), 70, sun)
+        moon_surf = SunMoonSurface((screen.width//1.2, screen.height//1.3), 70, moon)
+
 
         # Buttons
         day_button = Button('Day', screen.width // 5, screen.height / 1.3, is_day_enabled)
         night_button = Button('Night', screen.width // 1.6, screen.height / 1.3, is_night_enabled)
-        #print(day_button.check_click())
-        #print(night_button.check_click())
 
         if pygame.mouse.get_pressed()[0] and is_button_enabled: 
             is_button_enabled = False
@@ -133,8 +135,8 @@ def main():
         day_bg.draw(screen)
         day_button.draw(screen)
         night_button.draw(screen)
-        sun_bg.draw(screen)
-        moon_bg.draw(screen)
+        sun_surf.draw(screen)
+        moon_surf.draw(screen)
 
         pygame.display.flip()
         dt = clock.tick(12)
