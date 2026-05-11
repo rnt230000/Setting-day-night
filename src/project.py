@@ -57,17 +57,16 @@ class SunMoonSurface():
         surf.blit(resized_img, (surf.width//40, surf.height//40))
         return surf
     
-    def update_pos(self, enable):
+    def update_pos(self, enable, dt):
         x, y = self.pos
         if y == 137 and enable == True:
-            y = 738
-        elif y == 137 and enable == False:
-            y = 137
-        if y == 738 and enable == False:
-            y = 137
-        elif y == 738 and enable == True:
-            y = 738
+            y += 1
+            #if y >= 378:
+                #y = 378
+        else:
+            y = 378
         self.pos = (x, y)
+        print(self.pos)
     
     def draw(self, surface):
         surface.blit(self.surface, self.pos)
@@ -243,8 +242,8 @@ def main():
         # Game loop required
         clear_bg.update_color(is_day_enabled, dt)
         cloudy_bg.update_color(is_cloudy_enabled, dt)
-        sun_surf.update_pos(is_day_enabled)
-        moon_surf.update_pos(is_night_enabled)
+        sun_surf.update_pos(is_day_enabled, dt)
+        moon_surf.update_pos(is_night_enabled, dt)
 
         # Draw
         draw_this(clear_bg, screen)
