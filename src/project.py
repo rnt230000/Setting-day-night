@@ -1,6 +1,20 @@
 import pygame
 import time
 
+class GroundSurface():
+    def __init__(self, pos, size, color):
+        self.pos = pos
+        self.size = size
+        self.color = color
+        self.surface = self.create_surface()
+    
+    def create_surface(self):
+        surf = pygame.Surface((int(self.size*35), int(self.size*10)))
+        surf.fill(self.color)
+        return surf
+
+    def draw(self, surface):
+        surface.blit(self.surface, self.pos)
 
 class SunMoonSurface():
     def __init__(self, pos, size, img):
@@ -19,20 +33,16 @@ class SunMoonSurface():
         surf.blit(resized_img, (surf.width//40, surf.height//40))
         return surf
     
-    def update_pos(self, enable, dt):
+    def update_pos(self, enable):
         x, y = self.pos
-        travel_speed = 0.99
-        new_y = 0
-        if y == 730:
-            y = 730 if enable else 137 
-            new_y = 730 if enable else 137 
-        if y == 137:
-            y = 137 if enable else 730
-            new_y = 137 if enable else 730
-        if y < new_y:
-            y = min(y, new_y + travel_speed * dt)
-        elif y > new_y:
-            y = max(y, new_y - travel_speed * dt)
+        if y == 137 and enable == True:
+            y = 738
+        elif y == 137 and enable == False:
+            y = 137
+        if y == 738 and enable == False:
+            y = 137
+        elif y == 738 and enable == True:
+            y = 738
         self.pos = (x, y)
     
     def draw(self, surface):
@@ -47,22 +57,20 @@ class CloudSurface():
         self.alpha = 0 if enable else 255
 
 
-    def update_color(self, enable, dt_ms):
-        self.enable = enable
-        target_alpha = 0 if self.enable else 255
-        fade_speed = 0.89
+    #def update_color(self, enable, dt_ms):
+        #self.enable = enable
+        #target_alpha = 0 if self.enable else 255
+        #fade_speed = 0.89
 
-        if self.alpha < target_alpha:
-            self.alpha = min(target_alpha, self.alpha + (fade_speed * dt_ms))
-        elif self.alpha > target_alpha:
-            self.alpha = max(target_alpha, self.alpha - (fade_speed * dt_ms))
+        #if self.alpha < target_alpha:
+            #self.alpha = min(target_alpha, self.alpha + (fade_speed * dt_ms))
+        #elif self.alpha > target_alpha:
+            #self.alpha = max(target_alpha, self.alpha - (fade_speed * dt_ms))
 
     def draw(self, surface):
         overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         overlay.fill((*self.color, int(self.alpha)))
         surface.blit(overlay, (0,0))
-
-
 
 class DaySurface():
 
@@ -145,7 +153,7 @@ def main():
 
     # Moon
     moon = pygame.image.load("pixel_moon.png")
-    moon_surf = SunMoonSurface((screen.width//1.2, screen.height//1.3), 70, moon)
+    moon_surf = SunMoonSurface((int(screen.width//1.2), int(screen.height//1.3)), 70, moon)
 
     # PNG
     panda_png = pygame.image.load("pixel_panda.png")
@@ -154,6 +162,8 @@ def main():
     green_mellow_png = pygame.image.load("pixel_green_meadow.png")
     green_mellow = pygame.transform.scale(green_mellow_png, (1900, 1000))
     n_green_mellow = pygame.transform.grayscale(green_mellow)
+
+    dirt_meadow = GroundSurface((screen.width//900, screen.height//1.3), 50, (23, 103, 100))
 
     # Game loop
     running = True
@@ -206,10 +216,12 @@ def main():
         clear_bg = DaySurface(screen.width, screen.height, (92, 206, 250), is_day_enabled)
         cloudy_bg = CloudSurface(screen.width, screen.height, (176, 176, 176), is_day_enabled)
         clear_bg.update_color(is_button_enabled, dt)
-        sun_surf.update_pos(is_day_enabled, dt)
+        sun_surf.update_pos(is_day_enabled)
+        moon_surf.update_pos(is_night_enabled)
 
         # Draw
         draw_this(clear_bg, screen)
+        draw_this(dirt_meadow, screen)
         
         screen.blit(green_mellow, (screen.width//850, -200))
         screen.blit(panda, (screen.width//2, screen.height//2))
