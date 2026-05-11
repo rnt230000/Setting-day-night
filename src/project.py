@@ -41,10 +41,12 @@ class GroundSurface():
         surface.blit(self.surface, self.pos)
 
 class SunMoonSurface():
-    def __init__(self, pos, size, img):
+    def __init__(self, pos, size, img, visible_y, hidden_y):
         self.pos = pos
         self.size = size
         self.img = img
+        self.visible_y = visible_y
+        self.hidden_y = hidden_y
         self.color = (0, 255, 0)
         self.alpha = 255
         self.surface = self.update_surface()
@@ -59,14 +61,14 @@ class SunMoonSurface():
     
     def update_pos(self, enable, dt):
         x, y = self.pos
-        if y == 137 and enable == True:
-            y += 1
-            #if y >= 378:
-                #y = 378
-        else:
-            y = 378
+        target_y = self.visible_y if enable else self.hidden_y
+        speed = 0.89
+
+        if y < target_y:
+            y = min(target_y, y + speed * dt)
+        elif y > target_y:
+            y = max(target_y, y - speed * dt)
         self.pos = (x, y)
-        print(self.pos)
     
     def draw(self, surface):
         surface.blit(self.surface, self.pos)
@@ -111,7 +113,7 @@ class DaySurface():
     def update_color(self, enable, dt_ms):
         self.enable = enable
         target_alpha = 0 if self.enable else 255
-        fade_speed = 0.89
+        fade_speed = 0.50
 
         if self.alpha < target_alpha:
             self.alpha = min(target_alpha, self.alpha + (fade_speed * dt_ms))
@@ -173,11 +175,11 @@ def main():
 
     # Sun
     sun = pygame.image.load("pixel_sun.png")
-    sun_surf = SunMoonSurface((screen.width//8, screen.height//7), 70, sun)
+    sun_surf = SunMoonSurface((screen.width//8, screen.height//7), 70, sun, visible_y=100, hidden_y=800)
 
     # Moon
     moon = pygame.image.load("pixel_moon.png")
-    moon_surf = SunMoonSurface((int(screen.width//1.2), int(screen.height//1.3)), 70, moon)
+    moon_surf = SunMoonSurface((int(screen.width//1.2), int(screen.height//1.3)), 70, moon, visible_y=100, hidden_y=800)
 
     # PNG
     panda_png = pygame.image.load("pixel_panda.png")
@@ -242,8 +244,8 @@ def main():
         # Game loop required
         clear_bg.update_color(is_day_enabled, dt)
         cloudy_bg.update_color(is_cloudy_enabled, dt)
-        sun_surf.update_pos(is_day_enabled, dt)
-        moon_surf.update_pos(is_night_enabled, dt)
+        sun_surf.update_pos(is_night_enabled, dt)
+        moon_surf.update_pos(is_day_enabled, dt)
 
         # Draw
         draw_this(clear_bg, screen)
