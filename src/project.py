@@ -73,27 +73,30 @@ class SunMoonSurface():
         surface.blit(self.surface, self.pos)
 
 class CloudSurface():
-    def __init__(self, width, height, color, enable):
+    def __init__(self, width, height, enable):
         self.width = width
         self.height = height
         self.enable = enable
-        self.color = color
+        self.day_clr = (176, 176, 176)
+        self.night_clr = (38, 38, 38)
         self.alpha = 0 if enable else 255
 
+    def update_color(self, enable, dt_ms):
+        self.enable = enable
+        target_alpha = 0 if self.enable else 255
+        fade_speed = 0.89
 
-    #def update_color(self, enable, dt_ms):
-        #self.enable = enable
-        #target_alpha = 0 if self.enable else 255
-        #fade_speed = 0.89
+        if self.alpha < target_alpha:
+            self.alpha = min(target_alpha, self.alpha + (fade_speed * dt_ms))
+        elif self.alpha > target_alpha:
+            self.alpha = max(target_alpha, self.alpha - (fade_speed * dt_ms))
 
-        #if self.alpha < target_alpha:
-            #self.alpha = min(target_alpha, self.alpha + (fade_speed * dt_ms))
-        #elif self.alpha > target_alpha:
-            #self.alpha = max(target_alpha, self.alpha - (fade_speed * dt_ms))
-
-    def draw(self, surface):
+    def draw(self, surface, n_enable):
         overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
-        overlay.fill((*self.color, int(self.alpha)))
+        if n_enable == False:
+            overlay.fill((*self.night_clr, int(self.alpha)))
+        elif n_enable == True:
+            overlay.fill((*self.day_clr, int(self.alpha)))
         surface.blit(overlay, (0,0))
 
 class DaySurface():
@@ -152,8 +155,6 @@ class Button():
         else:
             return False
 
-
-
 def main():
     pygame.init()
     pygame.display.set_caption("Time Setting")
@@ -183,11 +184,14 @@ def main():
     panda_png = pygame.image.load("pixel_panda.png")
     panda = pygame.transform.scale(panda_png, (100*2, 100*2))
 
-    green_mellow_png = pygame.image.load("pixel_green_meadow.png")
-    green_mellow = pygame.transform.scale(green_mellow_png, (1900, 1000))
-    
+    green_meadow_png = pygame.image.load("pixel_green_meadow.png")
+    green_meadow = pygame.transform.scale(green_meadow_png, (1900, 1000))
 
     dirt_meadow = GroundSurface((screen.width//900, screen.height//1.3), 50, (23, 103, 100))
+
+    clear_bg = DaySurface(screen.width, screen.height, (92, 206, 250), is_day_enabled)
+    cloudy_bg = CloudSurface(screen.width, screen.height, is_clear_enabled)
+
 
     # Game loop
     running = True
@@ -221,36 +225,34 @@ def main():
                     is_night_enabled = False
             # Weather buttons
             if cloudy_button.check_click():
+                if is_clear_enabled == False:
+                    is_clear_enabled = True
+                    is_cloudy_enabled = False
+                else:
+                    is_cloudy_enabled = False
+            if clear_button.check_click():
                 if is_cloudy_enabled == False:
                     is_cloudy_enabled = True
                     is_clear_enabled = False
                 else:
                     is_cloudy_enabled = False
-            if clear_button.check_click():
-                if is_clear_enabled == False:
-                    is_clear_enabled = True
-                    is_cloudy_enabled = False
-                else:
-                    is_clear_enabled = False
 
         if not pygame.mouse.get_pressed()[0] and not is_button_enabled: 
             is_button_enabled = True
 
         # Game loop required
-        night_mellow = EnableGrayscale(green_mellow, (screen.width//850, -200), is_night_enabled)
-        clear_bg = DaySurface(screen.width, screen.height, (92, 206, 250), is_day_enabled)
-        cloudy_bg = CloudSurface(screen.width, screen.height, (176, 176, 176), is_day_enabled)
-        clear_bg.update_color(is_button_enabled, dt)
+        clear_bg.update_color(is_day_enabled, dt)
+        cloudy_bg.update_color(is_cloudy_enabled, dt)
         sun_surf.update_pos(is_day_enabled)
         moon_surf.update_pos(is_night_enabled)
-        #night_mellow.convert_image()
 
         # Draw
         draw_this(clear_bg, screen)
-        draw_this(dirt_meadow, screen)
         draw_this(sun_surf, screen)
         draw_this(moon_surf, screen)
-        draw_this(night_mellow, screen)
+        cloudy_bg.draw(screen, is_night_enabled)
+        draw_this(dirt_meadow, screen)
+        screen.blit(green_meadow, (screen.width//1000, screen.height*-0.2))
         screen.blit(panda, (screen.width//2, screen.height//2))
         draw_this(day_button, screen)
         draw_this(night_button, screen)
