@@ -222,17 +222,14 @@ def main():
         # Draw
         draw_this(clear_bg, screen)
         draw_this(dirt_meadow, screen)
-        
+        draw_this(sun_surf, screen)
+        draw_this(moon_surf, screen)
         screen.blit(green_mellow, (screen.width//850, -200))
         screen.blit(panda, (screen.width//2, screen.height//2))
-
         draw_this(day_button, screen)
         draw_this(night_button, screen)
         draw_this(cloudy_button, screen)
         draw_this(clear_button, screen)
-        draw_this(sun_surf, screen)
-        draw_this(moon_surf, screen)
-
 
         pygame.display.flip()
         dt = clock.tick(12)
