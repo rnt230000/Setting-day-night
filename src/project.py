@@ -1,5 +1,29 @@
 import pygame
-import time
+
+class EnableGrayscale():
+    def __init__(self, image, pos, enable):
+        self.img = image
+        self.pos = pos
+        self.enable = enable
+        self.new_img = self.convert_image()
+
+    def convert_image(self):
+        orig_img = self.img
+        gray_img = pygame.transform.grayscale(self.img)
+        gray_r, gray_b, gray_g = gray_img
+        if self.enable == True:
+            for w in range(orig_img.get_width()):
+                for h in range(orig_img.get_height()):
+                    r, g, b, = orig_img.get_at((w, h))
+                    orig_img.set_at((w, h), pygame.Color(gray_r, gray_g, gray_b))
+        elif self.enable == False:
+            for w in range(orig_img.get_width()):
+                for h in range(orig_img.get_height()):
+                    r, g, b, = orig_img.get_at((w, h))
+                    orig_img.set_at((w, h), pygame.Color(r, g, b))
+
+    def draw(self, surface):
+        surface.blit(self.new_img, self.pos)
 
 class GroundSurface():
     def __init__(self, pos, size, color):
@@ -161,7 +185,7 @@ def main():
 
     green_mellow_png = pygame.image.load("pixel_green_meadow.png")
     green_mellow = pygame.transform.scale(green_mellow_png, (1900, 1000))
-    n_green_mellow = pygame.transform.grayscale(green_mellow)
+    
 
     dirt_meadow = GroundSurface((screen.width//900, screen.height//1.3), 50, (23, 103, 100))
 
@@ -213,18 +237,20 @@ def main():
             is_button_enabled = True
 
         # Game loop required
+        night_mellow = EnableGrayscale(green_mellow, (screen.width//850, -200), is_night_enabled)
         clear_bg = DaySurface(screen.width, screen.height, (92, 206, 250), is_day_enabled)
         cloudy_bg = CloudSurface(screen.width, screen.height, (176, 176, 176), is_day_enabled)
         clear_bg.update_color(is_button_enabled, dt)
         sun_surf.update_pos(is_day_enabled)
         moon_surf.update_pos(is_night_enabled)
+        #night_mellow.convert_image()
 
         # Draw
         draw_this(clear_bg, screen)
         draw_this(dirt_meadow, screen)
         draw_this(sun_surf, screen)
         draw_this(moon_surf, screen)
-        screen.blit(green_mellow, (screen.width//850, -200))
+        draw_this(night_mellow, screen)
         screen.blit(panda, (screen.width//2, screen.height//2))
         draw_this(day_button, screen)
         draw_this(night_button, screen)
