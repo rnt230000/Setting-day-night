@@ -1,7 +1,7 @@
 # Environmental Setting Control
 
 ## Demo
-Demo Video: <URL>
+Demo Video: https://youtu.be/t5bWXlnUP-4
 
 ## GitHub Repository
 GitHub Repo:  https://github.com/rnt230000/Setting-day-night
