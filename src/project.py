@@ -1,29 +1,5 @@
 import pygame
 
-class EnableGrayscale():
-    def __init__(self, image, pos, enable):
-        self.img = image
-        self.pos = pos
-        self.enable = enable
-        self.new_img = self.convert_image()
-
-    def convert_image(self):
-        orig_img = self.img
-        gray_img = pygame.transform.grayscale(self.img)
-        gray_r, gray_b, gray_g = gray_img
-        if self.enable == True:
-            for w in range(orig_img.get_width()):
-                for h in range(orig_img.get_height()):
-                    r, g, b, = orig_img.get_at((w, h))
-                    orig_img.set_at((w, h), pygame.Color(gray_r, gray_g, gray_b))
-        elif self.enable == False:
-            for w in range(orig_img.get_width()):
-                for h in range(orig_img.get_height()):
-                    r, g, b, = orig_img.get_at((w, h))
-                    orig_img.set_at((w, h), pygame.Color(r, g, b))
-
-    def draw(self, surface):
-        surface.blit(self.new_img, self.pos)
 
 class GroundSurface():
     def __init__(self, pos, size, color):
@@ -73,7 +49,7 @@ class SunMoonSurface():
     def draw(self, surface):
         surface.blit(self.surface, self.pos)
 
-class CloudSurface():
+class CloudySky():
     def __init__(self, width, height, enable):
         self.width = width
         self.height = height
@@ -191,7 +167,7 @@ def main():
     dirt_meadow = GroundSurface((screen.width//900, screen.height//1.3), 50, (23, 103, 100))
 
     clear_bg = DaySurface(screen.width, screen.height, (92, 206, 250), is_day_enabled)
-    cloudy_bg = CloudSurface(screen.width, screen.height, is_clear_enabled)
+    cloudy_bg = CloudySky(screen.width, screen.height, is_clear_enabled)
 
 
     # Game loop
